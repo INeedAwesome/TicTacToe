@@ -14,5 +14,6 @@ bin-int/
 Makefile
 
 # Exclude
+!*.lua
 !vendor/bin
 !scripts/
