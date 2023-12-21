@@ -9,6 +9,7 @@ const int BOARD_SIZE = 9;
 
 void ResetBoard(char spaces[]);
 void PrintBoard(char spaces[]);
+bool CheckWinner(char spaces[], char player, int& scoreX, int& scoreO);
 
 void ToUpper(char& ch);
 
@@ -21,17 +22,25 @@ int main()
 	* | X | X | X |
 	* -------------
 	*/
-	char spaces[BOARD_SIZE] = { '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	int playerScoreX = 0;
+	int playerScoreO = 0;
+
+	char spaces[BOARD_SIZE] = { 
+		'1', '2', '3', 
+		'4', '5', '6', 
+		'7', '8', '9'
+	};
 	PrintBoard(spaces);
 	ResetBoard(spaces);
 
+	bool continuePlaying = true;
 	do {
 		int position;
 		char character;
 		do
 		{
-			std::cout << "Write a position, 1-9 and X or O (e.g. 1X): ";
-			std::cin >> position >> character;
+			std::cout << "Write a type and position, X or O then 1-9 (e.g. X1): ";
+			std::cin >> character >> position;
 			if (position == 0)
 			{
 				return 0;
@@ -44,7 +53,9 @@ int main()
 		
 		PrintBoard(spaces);
 
-	} while (true);
+		continuePlaying = CheckWinner(spaces, character, playerScoreX, playerScoreO);
+
+	} while (continuePlaying);
 
 
 
@@ -78,6 +89,45 @@ void PrintBoard(char spaces[])
 		}
 	}
 	std::cout << "-------------" << std::endl;
+}
+
+bool CheckWinner(char spaces[], char player, int& playerScoreX, int& playerScoreO)
+{
+	// check row
+	for (int i = 0; i < BOARD_SIZE; i+=3)
+	{
+		if (spaces[i] == player && spaces[i+1] == player && spaces[i+2] == player)
+		{
+			std::cout << std::endl << player << " Won the game!" << std::endl;
+			return false; 
+		}
+	}
+
+	// check column
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		if (spaces[i] == player && spaces[i + (1 * 3)] == player && spaces[i + (2 * 3)] == player)
+		{
+			std::cout << std::endl << player << " Won the game!" << std::endl;
+			return false;
+		}
+	}
+
+	// check left to right diagonal
+	if (spaces[0] == player && spaces[4] == player && spaces[8] == player)
+	{
+		std::cout << std::endl << player << " Won the game!" << std::endl;
+		return false;
+	}
+
+	// check right to left diagonal
+	if (spaces[2] == player && spaces[4] == player && spaces[6] == player)
+	{
+		std::cout << std::endl << player << " Won the game!" << std::endl;
+		return false;
+	}
+
+	return true; // continue playing
 }
 
 void ToUpper(char& ch)
