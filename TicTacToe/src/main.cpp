@@ -1,5 +1,5 @@
 /*
-* TicTacToe Game
+* Tic-Tac-Toe Game
 * Created 2023-12-21 by INeedAwesome
 */
 
@@ -7,6 +7,7 @@
 
 const int BOARD_SIZE = 9;
 
+bool MakeMove(char spaces[], char& character, int& position);
 void ResetBoard(char spaces[]);
 void PrintBoard(char spaces[]);
 bool CheckWinner(char spaces[], char player, int& scoreX, int& scoreO);
@@ -22,44 +23,63 @@ int main()
 	* | X | X | X |
 	* -------------
 	*/
+	int playAgain = 0;
 	int playerScoreX = 0;
 	int playerScoreO = 0;
 
-	char spaces[BOARD_SIZE] = { 
-		'1', '2', '3', 
-		'4', '5', '6', 
-		'7', '8', '9'
-	};
-	PrintBoard(spaces);
-	ResetBoard(spaces);
-
-	bool continuePlaying = true;
-	do {
-		int position;
-		char character;
-		do
-		{
-			std::cout << "Write a type and position, X or O then 1-9 (e.g. X1): ";
-			std::cin >> character >> position;
-			if (position == 0)
-			{
-				return 0;
-			}
-			ToUpper(character);
-		} 
-		while (character != 'X' && character != 'O'); // exists when character is X or O
-
-		spaces[position-1] = character;
-		
+	do
+	{
+		char spaces[BOARD_SIZE] = { 
+			'1', '2', '3', 
+			'4', '5', '6', 
+			'7', '8', '9'
+		};
 		PrintBoard(spaces);
+		ResetBoard(spaces);
 
-		continuePlaying = CheckWinner(spaces, character, playerScoreX, playerScoreO);
+		bool continuePlaying = true;
+		do {
+			int position = 0;
+			char character = ' ';
 
-	} while (continuePlaying);
+			if (MakeMove(spaces, character, position) == false) 
+				return 0;
 
+			PrintBoard(spaces);
 
+			continuePlaying = CheckWinner(spaces, character, playerScoreX, playerScoreO);
+
+		}
+		while (continuePlaying);
+		std::cout << "Play Again?\n0. No \n1. Yes" << std::endl;
+		std::cin >> playAgain;
+		system("cls");
+
+	} 
+	while (playAgain);
 
 	return 0;
+}
+
+bool MakeMove(char spaces[], char& character, int& position)
+{
+	while (character != 'X' && character != 'O') // exits when character is X or O
+	{
+		std::cout << "Write a type and position, X/O, 1-9 (e.g. x1): ";
+		std::cin >> character >> position;
+		if (position == 0)
+		{
+			std::cout << " - Incorrect format! X/O, 1-9 (e.g. x1): ";
+			return false;
+		}
+		ToUpper(character);
+
+		if (spaces[position - 1] == ' ')
+		{
+			spaces[position - 1] = character;
+		}
+	}
+	return true;
 }
 
 void ResetBoard(char spaces[])
