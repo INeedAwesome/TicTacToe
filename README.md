@@ -2,6 +2,9 @@
 
 I've made an app template with premake because I wanted it to help me set up future projects easier.
 
+## Building
+Navigate to /scripts/ and run setup.bat if you're on windows
+
 ***
 > Follow these steps for both operating systems and then go for OS specific instructions
 
