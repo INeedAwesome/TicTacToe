@@ -10,7 +10,7 @@ const int BOARD_SIZE = 9;
 bool MakeMove(char spaces[], char& character, int& position);
 void ResetBoard(char spaces[]);
 void PrintBoard(char spaces[]);
-bool CheckWinner(char spaces[], char player, int& scoreX, int& scoreO);
+bool CheckWinner(char spaces[], char player, int& scoreX, int& scoreO, int& moves);
 
 void ToUpper(char& ch);
 
@@ -24,11 +24,13 @@ int main()
 	* -------------
 	*/
 	int playAgain = 0;
+	int moves = 0;
 	int playerScoreX = 0;
 	int playerScoreO = 0;
 
 	do
 	{
+		moves = 0;
 		char spaces[BOARD_SIZE] = { 
 			'1', '2', '3', 
 			'4', '5', '6', 
@@ -47,8 +49,7 @@ int main()
 
 			PrintBoard(spaces);
 
-			continuePlaying = CheckWinner(spaces, character, playerScoreX, playerScoreO);
-
+			continuePlaying = CheckWinner(spaces, character, playerScoreX, playerScoreO, moves);
 		}
 		while (continuePlaying);
 		std::cout << "Play Again?\n0. No \n1. Yes" << std::endl;
@@ -111,7 +112,7 @@ void PrintBoard(char spaces[])
 	std::cout << "-------------" << std::endl;
 }
 
-bool CheckWinner(char spaces[], char player, int& playerScoreX, int& playerScoreO)
+bool CheckWinner(char spaces[], char player, int& playerScoreX, int& playerScoreO, int& moves)
 {
 	// check row
 	for (int i = 0; i < BOARD_SIZE; i+=3)
@@ -146,6 +147,13 @@ bool CheckWinner(char spaces[], char player, int& playerScoreX, int& playerScore
 		std::cout << std::endl << player << " Won the game!" << std::endl;
 		return false;
 	}
+
+	if (moves >= 8)
+	{
+		std::cout << "Draw!" << std::endl;
+		return false;
+	}
+	moves++;
 
 	return true; // continue playing
 }
